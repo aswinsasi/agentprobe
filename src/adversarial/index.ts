@@ -8,7 +8,7 @@ export type { Attack, AttackResult, SecurityReport, Vulnerability } from './type
  * Adversarial testing API.
  * 
  * Usage:
- *   import { adversarial } from '@myaswin123/agentprobe';
+ *   import { adversarial } from 'probeagent';
  *   const attacks = adversarial.promptInjection({ count: 10 });
  */
 export const adversarial = {

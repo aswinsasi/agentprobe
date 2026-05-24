@@ -39,15 +39,15 @@ AgentProbe solves this with three testing modes:
 ## Quick Start
 
 ```bash
-npm install @myaswin123/agentprobe
-npx @myaswin123/agentprobe init
-npx @myaswin123/agentprobe run
+npm install probeagent
+npx probeagent init
+npx probeagent run
 ```
 
 ## Write Your First Probe
 
 ```typescript
-import { probe, loadAgent, expect } from '@myaswin123/agentprobe';
+import { probe, loadAgent, expect } from 'probeagent';
 
 const agent = loadAgent({
   async execute(input) {
@@ -136,7 +136,7 @@ const agent = loadAgent(myAgent)
 200+ built-in attacks across 8 categories:
 
 ```typescript
-import { adversarial } from '@myaswin123/agentprobe';
+import { adversarial } from 'probeagent';
 
 probe('security suite', async () => {
   const attacks = adversarial.promptInjection({ count: 20, severity: 'critical' });
@@ -168,7 +168,7 @@ probe('security suite', async () => {
 Stress-test your agent under adverse conditions:
 
 ```typescript
-import { chaos } from '@myaswin123/agentprobe';
+import { chaos } from 'probeagent';
 
 probe('handles 100 concurrent users', async () => {
   const results = await chaos.stress(agent, {
@@ -193,7 +193,7 @@ probe('handles 100 concurrent users', async () => {
 ### GitHub Actions
 
 ```yaml
-- run: npx @myaswin123/agentprobe run --report junit --output ./results
+- run: npx probeagent run --report junit --output ./results
   env:
     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 ```
@@ -201,11 +201,11 @@ probe('handles 100 concurrent users', async () => {
 ### Reports
 
 ```bash
-npx @myaswin123/agentprobe run --report terminal   # colored terminal output
-npx @myaswin123/agentprobe run --report json       # JSON (pipe to jq)
-npx @myaswin123/agentprobe run --report html       # beautiful HTML report
-npx @myaswin123/agentprobe run --report junit      # JUnit XML for CI
-npx @myaswin123/agentprobe run --upload            # upload to AgentProbe Cloud
+npx probeagent run --report terminal   # colored terminal output
+npx probeagent run --report json       # JSON (pipe to jq)
+npx probeagent run --report html       # beautiful HTML report
+npx probeagent run --report junit      # JUnit XML for CI
+npx probeagent run --upload            # upload to AgentProbe Cloud
 ```
 
 ---
@@ -238,18 +238,18 @@ const agent = loadAgent({
 ## CLI
 
 ```bash
-npx @myaswin123/agentprobe init                      # scaffold project
-npx @myaswin123/agentprobe run                       # run all probes
-npx @myaswin123/agentprobe run --verbose             # show assertion details
-npx @myaswin123/agentprobe run --tag security        # filter by tag
-npx @myaswin123/agentprobe run --bail                # stop on first failure
-npx @myaswin123/agentprobe run --grep "refund"       # filter by name
-npx @myaswin123/agentprobe run --report html         # HTML report
-npx @myaswin123/agentprobe run --upload              # upload to cloud
+npx probeagent init                      # scaffold project
+npx probeagent run                       # run all probes
+npx probeagent run --verbose             # show assertion details
+npx probeagent run --tag security        # filter by tag
+npx probeagent run --bail                # stop on first failure
+npx probeagent run --grep "refund"       # filter by name
+npx probeagent run --report html         # HTML report
+npx probeagent run --upload              # upload to cloud
 ```
 
 ---
 
 ## License
 
-MIT © [Aswin Sasi](https://github.com/myaswin123) / Aswin Sasi
+MIT © [Aswin Sasi](https://github.com/aswindev) / Aswin Sasi

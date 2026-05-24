@@ -56,4 +56,9 @@ class RunContext {
   }
 }
 
-export const runContext = new RunContext();
+const CONTEXT_KEY = '__agentprobe_context__';
+const g = globalThis as any;
+if (!g[CONTEXT_KEY]) {
+  g[CONTEXT_KEY] = new RunContext();
+}
+export const runContext: RunContext = g[CONTEXT_KEY];

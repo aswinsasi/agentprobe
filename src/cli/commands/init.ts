@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export async function initCommand(): Promise<void> {
+export async function initCommand() {
   console.log('');
   console.log('  ⚡ AgentProbe — Stress-testing engine for AI agents');
   console.log('');
@@ -12,20 +12,20 @@ export async function initCommand(): Promise<void> {
     console.log('  ✓ Created probes/');
   }
 
-  const probe = path.join(dir, 'example.probe.ts');
-  if (!fs.existsSync(probe)) {
-    fs.writeFileSync(probe, EXAMPLE);
-    console.log('  ✓ Created probes/example.probe.ts');
+  const probePath = path.join(dir, 'example.probe.mjs');
+  if (!fs.existsSync(probePath)) {
+    fs.writeFileSync(probePath, EXAMPLE);
+    console.log('  ✓ Created probes/example.probe.mjs');
   }
 
   console.log('');
   console.log('  Next steps:');
-  console.log('  1. Edit probes/example.probe.ts with your agent');
-  console.log('  2. Run:  npx tsx src/cli/index.ts run');
+  console.log('  1. Edit probes/example.probe.mjs with your agent');
+  console.log('  2. Run:  npx probeagent run');
   console.log('');
 }
 
-const EXAMPLE = `import { probe, loadAgent, expect } from '../src/index.js';
+const EXAMPLE = `import { probe, loadAgent, expect } from 'probeagent';
 
 // ── Replace this with your real agent ────────────────────
 const agent = loadAgent({
@@ -35,8 +35,8 @@ const agent = loadAgent({
 
     return {
       reply: isRefund
-        ? 'I\\'ve processed your refund of $29.99 for order #12345.'
-        : 'Hello! How can I help you today?',
+        ? "I've processed your refund of $29.99 for order #12345."
+        : "Hello! How can I help you today?",
       toolCalls: isRefund
         ? [
             { tool: 'lookupOrder', input: { orderId: '12345' }, output: { status: 'delivered' }, duration: 40, timestamp: Date.now() },

@@ -1,6 +1,6 @@
 {
-  "name": "@myaswin123/agentprobe",
-  "version": "1.0.1",
+  "name": "probeagent",
+  "version": "1.0.0",
   "description": "Break your AI agent before your customers do. Stress-testing engine for AI agents.",
   "keywords": [
     "ai",
@@ -12,7 +12,7 @@
     "prompt-injection",
     "chaos-engineering"
   ],
-  "author": "Aswin Sasi <aswin@myaswin123.com>",
+  "author": "Aswin Sasi <aswin@aswindev.com>",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.cjs",

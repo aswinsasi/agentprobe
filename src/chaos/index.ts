@@ -12,7 +12,7 @@ import { generateVariations } from './variations.js';
  * Chaos testing API.
  *
  * Usage:
- *   import { chaos } from '@myaswin123/agentprobe';
+ *   import { chaos } from 'probeagent';
  *
  *   const results = await chaos.stress(agent, { concurrency: 50, ... });
  *   const inputs = chaos.generateVariations('help me', 100);

@@ -35,4 +35,10 @@ class ProbeRegistry {
   }
 }
 
-export const registry = new ProbeRegistry();
+// Store on globalThis so CLI bundle and library bundle share the same instance
+const REGISTRY_KEY = '__agentprobe_registry__';
+const g = globalThis as any;
+if (!g[REGISTRY_KEY]) {
+  g[REGISTRY_KEY] = new ProbeRegistry();
+}
+export const registry: ProbeRegistry = g[REGISTRY_KEY];

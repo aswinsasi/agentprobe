@@ -36,7 +36,7 @@ export async function runCommand(files: string[], options: RunOptions): Promise<
   if (probeFiles.length === 0) {
     console.log('');
     console.log('  No probe files found.');
-    console.log('  Create probes in probes/ directory or run: npx agentprobe init');
+    console.log('  Create probes in probes/ directory or run: npx probeagent init');
     console.log('');
     process.exit(1);
   }
@@ -48,8 +48,22 @@ export async function runCommand(files: string[], options: RunOptions): Promise<
     try {
       await import(pathToFileURL(file).href);
     } catch (err: any) {
-      console.error(`\n  Error loading ${path.relative(process.cwd(), file)}:`);
-      console.error(`  ${err.message}\n`);
+      const relFile = path.relative(process.cwd(), file);
+      const isTsFile = file.endsWith('.ts') || file.endsWith('.mts');
+      const isTsError = err.message?.includes('Cannot find package') ||
+        err.message?.includes('Unknown file extension') ||
+        err.message?.includes('ERR_UNKNOWN_FILE_EXTENSION');
+
+      console.error('\n  Error loading ' + relFile + ':');
+
+      if (isTsFile && isTsError) {
+        console.error('  TypeScript probes require tsx. Install it:');
+        console.error('  npm install -D tsx');
+        console.error('  Then run: npx tsx node_modules/.bin/agentprobe run\n');
+        console.error('  Or rename your probe to .mjs and use plain JavaScript.\n');
+      } else {
+        console.error('  ' + err.message + '\n');
+      }
       process.exit(1);
     }
   }
