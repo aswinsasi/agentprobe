@@ -1,6 +1,6 @@
 {
   "name": "probeagent",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Break your AI agent before your customers do. Stress-testing engine for AI agents.",
   "keywords": [
     "ai",
@@ -12,7 +12,15 @@
     "prompt-injection",
     "chaos-engineering"
   ],
-  "author": "Aswin Sasi <aswin@aswindev.com>",
+  "author": "Aswin Sasi <aswinsasi@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aswinsasi/AgentProbe"
+  },
+  "homepage": "https://github.com/aswinsasi/AgentProbe#readme",
+  "bugs": {
+    "url": "https://github.com/aswinsasi/AgentProbe/issues"
+  },
   "license": "MIT",
   "type": "module",
   "main": "dist/index.cjs",
