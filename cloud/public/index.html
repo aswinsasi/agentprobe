@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentProbe Cloud</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #09090f; color: #d4d4d8; min-height: 100vh; }
+  .top-bar { display: flex; align-items: center; gap: 12px;
+    padding: 14px 28px; border-bottom: 1px solid #1a1a2e; background: #0d0d15; }
+  .logo { width: 28px; height: 28px; border-radius: 7px;
+    background: linear-gradient(135deg, #7f77dd, #1d9e75); }
+  .top-bar h1 { font-size: 16px; font-weight: 600; }
+  .cloud { color: #7f77dd; font-size: 12px; background: rgba(127,119,221,0.12);
+    padding: 2px 8px; border-radius: 4px; }
+  .key-bar { padding: 12px 28px; background: #0d0d15; border-bottom: 1px solid #1a1a2e;
+    display: flex; align-items: center; gap: 10px; }
+  .key-bar input { flex: 1; background: #12121f; border: 1px solid #1e1e33; color: #e0e0e0;
+    padding: 8px 14px; border-radius: 6px; font-size: 13px; font-family: monospace; }
+  .key-bar button { background: #7f77dd; color: #fff; border: none; padding: 8px 18px;
+    border-radius: 6px; font-size: 13px; cursor: pointer; font-weight: 500; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 28px; }
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 28px; }
+  .stat { background: #0f0f1a; border: 1px solid #1a1a2e; border-radius: 10px; padding: 18px 20px; }
+  .stat-value { font-size: 26px; font-weight: 600; margin-bottom: 2px; }
+  .stat-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+  .section { margin-bottom: 28px; }
+  .section h2 { font-size: 15px; font-weight: 500; margin-bottom: 14px;
+    padding-bottom: 8px; border-bottom: 1px solid #1a1a2e; color: #a0a0b0; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.5px; color: #555; border-bottom: 1px solid #1a1a2e; }
+  td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #111118; }
+  tr:hover { background: rgba(127,119,221,0.04); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .badge-pass { background: rgba(34,197,94,0.12); color: #22c55e; }
+  .badge-fail { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .badge-mixed { background: rgba(234,179,8,0.12); color: #eab308; }
+  .green { color: #22c55e; } .red { color: #ef4444; } .amber { color: #eab308; }
+  .purple { color: #7f77dd; } .dim { color: #555; }
+  .chart-area { height: 140px; display: flex; align-items: flex-end; gap: 3px; padding: 8px 0; }
+  .chart-bar { flex: 1; border-radius: 3px 3px 0 0; min-width: 8px; cursor: pointer; }
+  .empty { text-align: center; padding: 60px 20px; color: #555; }
+  .empty h3 { font-size: 16px; margin-bottom: 8px; color: #888; }
+  .regression-item { display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-bottom: 1px solid #111118; font-size: 13px; }
+  @media (max-width: 768px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="logo"></div>
+  <h1>AgentProbe</h1>
+  <span class="cloud">Cloud</span>
+  <span style="margin-left:auto;font-size:12px;color:#555" id="status">Not connected</span>
+</div>
+<div class="key-bar">
+  <input type="text" id="apikey" placeholder="Paste your API key (ap_...)" />
+  <button id="connectBtn">Connect</button>
+</div>
+<div class="container"><div id="content">
+  <div class="empty">
+    <h3>Connect to view your probe results</h3>
+    <p>Paste your API key above and click Connect.</p>
+  </div>
+</div></div>
+<script>
+var API_KEY = '';
+var API_BASE = window.location.origin;
+var keyInput = document.getElementById('apikey');
+var statusEl = document.getElementById('status');
+var contentEl = document.getElementById('content');
+
+document.getElementById('connectBtn').addEventListener('click', doConnect);
+keyInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doConnect(); });
+
+var stored = localStorage.getItem('ap_key');
+if (stored) { keyInput.value = stored; doConnect(); }
+
+function doConnect() {
+  API_KEY = keyInput.value.trim();
+  if (!API_KEY) return;
+  localStorage.setItem('ap_key', API_KEY);
+  statusEl.textContent = 'Loading...';
+  statusEl.style.color = '#eab308';
+
+  Promise.all([
+    apiFetch('/api/dashboard'),
+    apiFetch('/api/runs?limit=30')
+  ]).then(function(res) {
+    if (res[0].error || res[1].error) {
+      statusEl.textContent = 'Invalid key';
+      statusEl.style.color = '#ef4444';
+      return;
+    }
+    statusEl.textContent = 'Connected';
+    statusEl.style.color = '#22c55e';
+    render(res[0], res[1].runs || []);
+  }).catch(function() {
+    statusEl.textContent = 'Failed';
+    statusEl.style.color = '#ef4444';
+  });
+}
+
+function apiFetch(path) {
+  return fetch(API_BASE + path, {
+    headers: { 'Authorization': 'Bearer ' + API_KEY }
+  }).then(function(r) { return r.json(); });
+}
+
+function render(stats, runs) {
+  var t = stats.totals || {};
+  var tp = t.total_probes || 0;
+  var passed = t.total_passed || 0;
+  var pr = tp > 0 ? Math.round((passed / tp) * 100) : 0;
+  var prc = pr >= 80 ? 'green' : (pr >= 50 ? 'amber' : 'red');
+
+  var h = '<div class="stats">' +
+    mkStat(t.total_runs || 0, 'Total Runs', '') +
+    mkStat(pr + '%', 'Pass Rate', prc) +
+    mkStat(passed, 'Passed', 'green') +
+    mkStat(t.total_failed || 0, 'Failed', 'red') +
+    mkStat('$' + (t.total_cost || 0).toFixed(2), 'Total Cost', 'purple') +
+    '</div>';
+
+  // Chart
+  var recent = (stats.recent || []).slice().reverse();
+  if (recent.length > 1) {
+    var mx = 1;
+    for (var i = 0; i < recent.length; i++) {
+      var n = (recent[i].passed || 0) + (recent[i].failed || 0);
+      if (n > mx) mx = n;
+    }
+    var bars = '';
+    for (var i = 0; i < recent.length; i++) {
+      var r = recent[i];
+      var n = (r.passed||0) + (r.failed||0);
+      var rate = n > 0 ? r.passed / n : 0;
+      var ht = n > 0 ? Math.max(8, (n/mx)*120) : 4;
+      var c = rate >= 0.9 ? '#22c55e' : (rate >= 0.7 ? '#eab308' : '#ef4444');
+      bars += '<div class="chart-bar" style="height:'+ht+'px;background:'+c+'" title="'+Math.round(rate*100)+'%"></div>';
+    }
+    h += '<div class="section"><h2>Pass Rate Trend</h2><div class="chart-area">' + bars + '</div></div>';
+  }
+
+  // Table
+  if (runs.length > 0) {
+    var rows = '';
+    for (var i = 0; i < runs.length; i++) {
+      var r = runs[i];
+      var rate = r.total > 0 ? Math.round((r.passed/r.total)*100) : 0;
+      var bc = r.failed === 0 ? 'badge-pass' : (r.passed === 0 ? 'badge-fail' : 'badge-mixed');
+      var bt = r.failed === 0 ? 'PASS' : (r.passed === 0 ? 'FAIL' : 'MIXED');
+      var dt = (r.created_at||'').replace('T',' ').substring(0,16);
+      rows += '<tr><td><span class="badge '+bc+'">'+bt+'</span></td>' +
+        '<td>'+r.passed+'/'+r.total+' ('+rate+'%)</td>' +
+        '<td class="red">'+r.failed+'</td>' +
+        '<td class="purple">$'+(r.total_cost||0).toFixed(3)+'</td>' +
+        '<td>'+r.total_duration+'ms</td>' +
+        '<td class="dim">'+dt+'</td></tr>';
+    }
+    h += '<div class="section"><h2>Recent Runs</h2><table><thead><tr>' +
+      '<th>Status</th><th>Passed</th><th>Failed</th><th>Cost</th><th>Duration</th><th>Date</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+
+  // Regressions
+  var regs = stats.regressions || [];
+  if (regs.length > 0) {
+    var items = '';
+    for (var i = 0; i < regs.length; i++) {
+      items += '<div class="regression-item"><span class="red">✗</span>' +
+        '<span style="flex:1">' + regs[i].name + '</span>' +
+        '<span class="dim">' + (regs[i].created_at||'').split('T')[0] + '</span></div>';
+    }
+    h += '<div class="section"><h2>Recent Failures</h2>' + items + '</div>';
+  }
+
+  contentEl.innerHTML = h;
+}
+
+function mkStat(val, label, cls) {
+  return '<div class="stat"><div class="stat-value ' + cls + '">' + val + '</div>' +
+    '<div class="stat-label">' + label + '</div></div>';
+}
+</script>
+</body>
+</html>

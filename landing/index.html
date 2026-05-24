@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentProbe — Break your AI agent before your customers do</title>
+<meta name="description" content="The stress-testing engine for AI agents. Functional testing, adversarial attacks, and chaos engineering — in one SDK.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #09090f; color: #d4d4d8; }
+  a { color: #7f77dd; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+  .hero { text-align: center; padding: 100px 24px 60px; }
+  .logo { width: 56px; height: 56px; border-radius: 14px; margin: 0 auto 24px;
+    background: linear-gradient(135deg, #7f77dd, #1d9e75); }
+  .hero h1 { font-size: 44px; font-weight: 700; letter-spacing: -1.5px;
+    margin-bottom: 12px; color: #fff; }
+  .hero h1 span { background: linear-gradient(135deg, #7f77dd, #1d9e75);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 18px; color: #888; max-width: 500px; margin: 0 auto 36px; line-height: 1.6; }
+  .install { background: #12121f; border: 1px solid #1e1e33; border-radius: 10px;
+    padding: 14px 24px; display: inline-block; font-family: 'SF Mono', monospace;
+    font-size: 15px; color: #7f77dd; letter-spacing: 0.3px; cursor: pointer; }
+  .install:hover { border-color: #7f77dd; }
+  .install::before { content: '$ '; color: #555; }
+
+  .features { padding: 60px 0; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 48px; }
+  .card { background: #0f0f1a; border: 1px solid #1a1a2e; border-radius: 12px; padding: 24px; }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #e0e0e0; }
+  .card p { font-size: 13px; color: #777; line-height: 1.5; }
+  .card .icon { font-size: 24px; margin-bottom: 12px; }
+
+  .code-section { padding: 40px 0 80px; }
+  .code-section h2 { font-size: 24px; font-weight: 600; margin-bottom: 24px;
+    text-align: center; color: #fff; }
+  pre { background: #0d0d18; border: 1px solid #1a1a2e; border-radius: 12px;
+    padding: 24px; overflow-x: auto; font-size: 13px; line-height: 1.7;
+    font-family: 'SF Mono', 'Fira Code', monospace; color: #c8c8d0; }
+  .kw { color: #7f77dd; }
+  .str { color: #1d9e75; }
+  .fn { color: #e0a644; }
+  .cm { color: #555; }
+  .num { color: #ef9f27; }
+
+  .stats { display: flex; justify-content: center; gap: 48px; padding: 40px 0; text-align: center; }
+  .stats .val { font-size: 32px; font-weight: 700; color: #fff; }
+  .stats .label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .footer { text-align: center; padding: 40px 0; border-top: 1px solid #1a1a2e;
+    font-size: 13px; color: #555; }
+
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .hero h1 { font-size: 32px; }
+    .stats { flex-direction: column; gap: 20px; } }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo"></div>
+  <h1>Agent<span>Probe</span></h1>
+  <p>Break your AI agent before your customers do. Functional testing, adversarial attacks, and chaos engineering — in one SDK.</p>
+  <div class="install" onclick="navigator.clipboard.writeText('npm install @myaswin123/agentprobe')">npm install @myaswin123/agentprobe</div>
+</div>
+
+<div class="container">
+  <div class="stats">
+    <div><div class="val">200+</div><div class="label">Adversarial Attacks</div></div>
+    <div><div class="val">3</div><div class="label">Testing Modes</div></div>
+    <div><div class="val">45</div><div class="label">Unit Tests</div></div>
+    <div><div class="val">0</div><div class="label">Dependencies Required</div></div>
+  </div>
+
+  <div class="features">
+    <div class="grid">
+      <div class="card">
+        <div class="icon">🎯</div>
+        <h3>Functional Probes</h3>
+        <p>Verify tool calls, output content, cost, steps, and token usage. Like Jest but for AI agents.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🛡️</div>
+        <h3>Adversarial Attacks</h3>
+        <p>200+ built-in attacks: prompt injection, jailbreaks, social engineering, data extraction, and more.</p>
+      </div>
+      <div class="card">
+        <div class="icon">💥</div>
+        <h3>Chaos Engine</h3>
+        <p>Stress-test with concurrent users, random tool failures, latency injection, and budget enforcement.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3>Reports</h3>
+        <p>Terminal, JSON, HTML, and JUnit XML reports. CI/CD ready with GitHub Actions integration.</p>
+      </div>
+      <div class="card">
+        <div class="icon">☁️</div>
+        <h3>Cloud Dashboard</h3>
+        <p>Upload results, track regressions, monitor pass rates and costs over time.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔌</div>
+        <h3>Any Agent</h3>
+        <p>Built-in adapters for Claude, GPT-4, and any HTTP API. Works with LangChain, CrewAI, or custom agents.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-section">
+    <h2>Write probes in minutes</h2>
+    <pre><span class="kw">import</span> { probe, loadAgent, expect, adversarial } <span class="kw">from</span> <span class="str">'agentprobe'</span>;
+
+<span class="kw">const</span> agent = <span class="fn">loadAgent</span>(<span class="kw">new</span> <span class="fn">AnthropicAdapter</span>({
+  model: <span class="str">'claude-sonnet-4-20250514'</span>,
+  systemPrompt: <span class="str">'You are a support agent.'</span>,
+})).<span class="fn">budget</span>({ maxCost: <span class="num">0.10</span> });
+
+<span class="cm">// Does it do the right thing?</span>
+<span class="fn">probe</span>(<span class="str">'handles refund correctly'</span>, <span class="kw">async</span> () => {
+  <span class="kw">const</span> run = <span class="kw">await</span> agent.<span class="fn">execute</span>(<span class="str">'Refund order #123'</span>);
+  <span class="fn">expect</span>(run).<span class="fn">toHaveCalledTool</span>(<span class="str">'processRefund'</span>);
+  <span class="fn">expect</span>(run.cost).<span class="fn">toBeLessThan</span>(<span class="num">0.05</span>);
+});
+
+<span class="cm">// Can someone trick it?</span>
+<span class="fn">probe</span>(<span class="str">'resists prompt injection'</span>, <span class="kw">async</span> () => {
+  <span class="kw">const</span> attacks = adversarial.<span class="fn">promptInjection</span>({ count: <span class="num">20</span> });
+  <span class="kw">for</span> (<span class="kw">const</span> a <span class="kw">of</span> attacks) {
+    <span class="kw">const</span> run = <span class="kw">await</span> agent.<span class="fn">execute</span>(a.input);
+    <span class="fn">expect</span>(run.reply).<span class="fn">not</span>.<span class="fn">toLeakData</span>([<span class="str">'api_key'</span>]);
+  }
+});</pre>
+  </div>
+</div>
+
+<div class="footer">
+  <p>MIT License · Built by <a href="https://github.com/myaswin123">Aswin Sasi</a> ·
+    <a href="https://github.com/myaswin123/agentprobe">GitHub</a> ·
+    <a href="https://www.npmjs.com/package/agentprobe">npm</a></p>
+</div>
+</body>
+</html>

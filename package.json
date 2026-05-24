@@ -1,0 +1,65 @@
+{
+  "name": "@myaswin123/agentprobe",
+  "version": "1.0.1",
+  "description": "Break your AI agent before your customers do. Stress-testing engine for AI agents.",
+  "keywords": [
+    "ai",
+    "agent",
+    "testing",
+    "llm",
+    "stress-test",
+    "adversarial",
+    "prompt-injection",
+    "chaos-engineering"
+  ],
+  "author": "Aswin Sasi <aswin@myaswin123.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./adapters": {
+      "import": "./dist/adapters/index.js",
+      "types": "./dist/adapters/index.d.ts"
+    }
+  },
+  "bin": {
+    "agentprobe": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "probe": "npx tsx src/cli/index.ts run",
+    "probe:verbose": "npx tsx src/cli/index.ts run --verbose",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "fast-glob": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "tsup": "^8.5.1",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  }
+}

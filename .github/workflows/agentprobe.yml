@@ -1,0 +1,64 @@
+# .github/workflows/agentprobe.yml
+# Run AgentProbe tests on every push and PR
+
+name: AgentProbe CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  probe:
+    name: Run Agent Probes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run probes
+        run: npx agentprobe run --report junit --output ./results --verbose
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AGENTPROBE_API_KEY: ${{ secrets.AGENTPROBE_API_KEY }}
+
+      - name: Upload to AgentProbe Cloud
+        if: always()
+        run: npx agentprobe run --upload
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AGENTPROBE_API_KEY: ${{ secrets.AGENTPROBE_API_KEY }}
+          AGENTPROBE_ENDPOINT: ${{ secrets.AGENTPROBE_ENDPOINT }}
+        continue-on-error: true
+
+      - name: Publish Test Results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: AgentProbe Results
+          path: results/agentprobe-report.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agentprobe-report
+          path: results/
+          retention-days: 30
